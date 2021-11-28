@@ -6,7 +6,8 @@ class Article extends Model
     protected $name;
     protected $price;
     protected $description;
-    protected $fields = ["id", "name", "price", "description"];
+    protected $categorie_id;
+    protected $fields = ["name", "price", "description","categorie_id"];
 
     public function __construct()
     {
@@ -40,6 +41,38 @@ class Article extends Model
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategorieId()
+    {
+        return $this->categorie_id;
+    }
+
+    /**
+     * @param mixed $categorie_id
+     */
+    public function setCategorieId($categorie_id)
+    {
+        $this->categorie_id = $categorie_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
 

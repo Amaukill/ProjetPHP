@@ -1,6 +1,6 @@
 <div>
     <div>
-
+        <h1 class="text-center"> Liste d'articles </h1>
         <table class="table w-100">
             <thead class="thead-dark">
             <tr>
@@ -12,9 +12,6 @@
                 </td>
                 <td scope="col">
                     Prix
-                </td>
-                <td scope="col">
-                    Description
                 </td>
                 <td scope="col">
                     Actions
@@ -29,17 +26,14 @@
                         <?php echo $article->id; ?>
                     </td>
                     <td>
-                        <?php echo $article->name; ?>
+                        <a href="?route=ShowArticle&id=<?php echo $article->id ?>"> <?php echo $article->name; ?></a>
                     </td>
                     <td>
                         <?php echo $article->price; ?>€
                     </td>
                     <td>
-                        <?php echo $article->description; ?>
-                    </td>
-                    <td>
                         <a href="?route=DeleteArticle&id=<?php echo $article->id ?>"><i class="bi bi-x"></i></a>
-                        <a href="?route=modifyArticle&id=<?php echo $article->id ?>"><i class="bi bi-gear-fill"></i></a>
+                        <a href="?route=ModifyArticleView&id=<?php echo $article->id ?>"><i class="bi bi-gear-fill"></i></a>
                     </td>
                 </tr>
             <?php } ?>

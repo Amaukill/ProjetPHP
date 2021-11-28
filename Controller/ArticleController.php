@@ -29,39 +29,49 @@ class ArticleController extends Controller
         $this->View("ShowArticle", $a);
     }
 
-    function ModifyArticle()
+    function FindArticleByCategorie()
     {
         $art = new Article();
         $id = $_GET['id'];
-        $article = $art->FindId($id);
-        Article::Save($article);
-        $this->FindArticle($id);
+        $a = $art->FindByCategorie($id);
+        $this->View("ArticleView", $a);
     }
-    function CreateArticle(){
+
+    function ModifyArticle()
+    {
 
         $art = new Article();
-        $art->setName($_POST['name']);
-        $art->setDescription($_POST['price']);
-        $art->setPrice($_POST['description']);
+        if (isset($_GET['id'])) {
+            $art->setId($_GET['id']);
+        }
         $art->save();
+        header('location:?route=ListArticle');
         $this->listArticle();
     }
+
     function DeleteArticle()
     {
         $art = new Article();
         $id = $_GET['id'];
         $art->Delete($id);
+        header('location:?route=ListArticle');
         $this->listArticle();
     }
-    function ModifyArticleView($id=null){
-        $art = new Article();
-        $id = $_GET['id'];
-        $art->FindId($id);
-        $this->View("ModifyArticle",$art);
+
+    function ModifyArticleView($id = null)
+    {
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        }
+        if ($id != null) {
+            $art = new Article();
+            $a = $art->FindId($id);
+            $this->View("CreateArticle", $a);
+        } else {
+            $this->View("CreateArticle");
+        }
     }
-    function CreateArticleView(){
-        $this->View("CreateArticle");
-    }
+
 }
 
 ?>

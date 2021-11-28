@@ -14,7 +14,7 @@ abstract class Model
 
     function connexion()
     {
-        return new PDO("mysql:host=localhost;dbname=test;", "root", "");
+        return new PDO("mysql:host=localhost;dbname=projet;", "root", "");
     }
 
     function All()
@@ -42,12 +42,17 @@ abstract class Model
         $table = strtolower(get_called_class());
         $st = $db->prepare("Select * from $table where id=:id");
         $st->bindValue(":id", $id);
-        $array = [];
         $st->execute();
+        $model = get_called_class();
+        $object = new $model();
         while ($rq = $st->fetch(PDO::FETCH_ASSOC)) {
-            $array[] = $rq;
+
+            foreach ($rq as $key => $value) {
+                $object->$key = $value;
+            }
+
         }
-        return $array;
+        return $object;
     }
 
     function Save()
@@ -56,16 +61,18 @@ abstract class Model
         $db = $this->connexion();
         $pk = $this->id;
         if ($pk == null) {
-            $st = $db->prepare("insert into $table default values returning id");
+            $st = $db->prepare("insert into $table values ()");
             $st->execute();
-            $row = $st->fetch(pdo::FETCH_ASSOC);
-            $this->id = $row["id"];
+            $this->id = $db->lastInsertId();
         }
         foreach ($this->fields as $field) {
-            $st = $db->prepare("update $table set $field = :value where id=:id");
-            $st->bindValue("Value", $field);
+            if($_POST[$field] != null){
+            $st = $db->prepare("update $table set $field=:value where id=:id");
+            $value=$_POST[$field];
+            $st->bindValue("value", $value);
             $st->bindValue("id", $this->id);
             $st->execute();
+            }
         }
     }
 
@@ -77,5 +84,22 @@ abstract class Model
         $st->bindValue("id", $id);
         $st->execute();
     }
+    function FindByCategorie($id){
+        $db = $this->connexion();
+        $table = strtolower(get_called_class());
+        $st = $db->prepare("Select * from $table where categorie_id=:id " );
+        $st->bindValue("id", $id);
+        $array = [];
+        $st->execute();
+        while ($rq = $st->fetch(PDO::FETCH_ASSOC)) {
 
+            $model = get_called_class();
+            $object = new $model();
+            foreach ($rq as $key => $value) {
+                $object->$key = $value;
+            }
+            $array[] = $object;
+        }
+        return $array;
+    }
 }
